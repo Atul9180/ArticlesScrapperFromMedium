@@ -1,8 +1,20 @@
 import puppeteer from "puppeteer";
+import config from "../config.js";
 
 async function scrapeMediumArticles(searchQuery) {
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch(
+      {
+        args:[
+          "--disable-setuid-sandbox",
+          "--no-sandbox",
+          "--single-process",
+          "--no-zygote",
+          ],
+        executablePath:
+          config.NODE_ENV === "production" ? config.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath(),
+      }
+    );
     const page = await browser.newPage();
     await page.goto(`https://www.medium.com/search?q=${searchQuery}`);
 
@@ -29,7 +41,7 @@ async function scrapeMediumArticles(searchQuery) {
     return content;
   } catch (error) {
     console.error(error);
-    return { error: "Failed to scrape articles" };
+    return {error: `Something went wrong while running Puppeteer: ${error}`};
   }
 }
 
