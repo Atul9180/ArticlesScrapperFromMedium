@@ -3,6 +3,9 @@ import scrapeMediumArticles from "../utils/scraper.js";
 
 const router = express.Router();
 
+//server up test?
+router.get("/",(req,res)=>{res.send("Render puppeteer server is up Testing server ...")})
+
 // GET METHOD: '/articles'
 // Description: 'Redirecting to full article on Medium'
 router.get("/articles", (req, res) => {
